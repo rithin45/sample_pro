@@ -21,17 +21,31 @@ import AdminDashboard from "../admin/AdminDashboard";
 import ProtectedRoute from "../auth/ProtectedRoute";
 import AdminRoute from "../auth/AdminRoute";
 import UserRoute from "../auth/UserRoute";
+import HomeRoute from "../auth/HomeRoute";
 
 const Approute = () => {
   return (
     <Routes>
 
-      {/* PUBLIC ROUTES - Accessible to all (logged in or not) */}
-      <Route path="/" element={<Home />} />
+      {/* HOME ROUTE - Blocked for admins, accessible to guests and users */}
+      <Route path="/" element={
+        <HomeRoute>
+          <Home />
+        </HomeRoute>
+      } />
       <Route path="/product/:id" element={<ProductDetail />} />
-      <Route path="/cart" element={<Cart />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+
+      {/* CART ROUTE - Protected, users only (requires login) */}
+      <Route
+        path="/cart"
+        element={
+          <UserRoute>
+            <Cart />
+          </UserRoute>
+        }
+      />
 
       {/* USER PROTECTED ROUTES - Only users can access, admins are logged out */}
       <Route path="/checkout" element={

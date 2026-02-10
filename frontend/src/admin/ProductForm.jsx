@@ -229,95 +229,95 @@ const ProductForm = ({ onSuccess, editingProduct }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-[#111] rounded-lg border border-[#222] p-8 max-w-4xl">
-      {error && <div className="bg-red-900 text-red-100 p-3 rounded mb-6">{error}</div>}
+    <form onSubmit={handleSubmit} className="bg-[#111] rounded-lg border border-[#222] p-3 sm:p-5 md:p-8 w-full">
+      {error && <div className="bg-red-900 text-red-100 p-2 sm:p-3 rounded mb-4 sm:mb-6 text-xs">{error}</div>}
 
       {/* Product Name */}
-      <div className="mb-8">
-        <label className="block text-sm font-bold mb-2">Product Name *</label>
+      <div className="mb-4 sm:mb-6">
+        <label className="block text-xs font-bold mb-2">Name *</label>
         <input
           type="text"
           value={productName}
           onChange={handleProductNameChange}
           placeholder="e.g., Nike Air Max"
-          className="w-full p-3 bg-black border border-gray-700 rounded text-white placeholder-gray-500 focus:border-white focus:outline-none"
+          className="w-full p-2.5 sm:p-3 bg-black border border-gray-700 rounded text-white placeholder-gray-500 focus:border-white focus:outline-none text-xs sm:text-sm h-10"
           required
         />
       </div>
 
       {/* VARIANTS */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-black">Variants</h3>
+      <div className="mb-4 sm:mb-6">
+        <div className="flex gap-2 mb-3">
+          <h3 className="text-sm sm:text-base font-black">Variants</h3>
           <button
             type="button"
             onClick={addVariant}
-            className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded font-bold text-sm"
+            className="ml-auto px-2 py-1 bg-green-600 hover:bg-green-700 rounded font-bold text-xs h-8"
           >
-            + Add Variant
+            +
           </button>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-4 sm:space-y-5">
           {variants.map((variant, variantIdx) => (
-            <div key={variantIdx} className="bg-[#0a0a0a] border border-[#222] rounded-lg p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h4 className="font-bold">Variant {variantIdx + 1}</h4>
+            <div key={variantIdx} className="bg-[#0a0a0a] border border-[#222] rounded-lg p-3 sm:p-4">
+              <div className="flex justify-between items-center mb-3">
+                <h4 className="font-bold text-xs sm:text-sm">V{variantIdx + 1}</h4>
                 {variants.length > 1 && (
                   <button
                     type="button"
                     onClick={() => removeVariant(variantIdx)}
-                    className="px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-sm font-bold"
+                    className="px-2 py-1 bg-red-600 hover:bg-red-700 rounded text-xs h-8"
                   >
-                    Remove
+                    ✕
                   </button>
                 )}
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {/* Color and Color Code */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-xs font-bold mb-2">Color *</label>
+                    <label className="block text-xs font-bold mb-1">Color *</label>
                     <input
                       type="text"
                       value={variant.color}
                       onChange={(e) => handleVariantChange(variantIdx, "color", e.target.value)}
-                      placeholder="e.g., Black"
-                      className="w-full p-2 bg-black border border-gray-700 rounded text-white text-sm"
+                      placeholder="Black"
+                      className="w-full p-2 bg-black border border-gray-700 rounded text-white text-xs h-9"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold mb-2">Color Code</label>
+                    <label className="block text-xs font-bold mb-1">Code</label>
                     <input
                       type="color"
                       value={variant.colorCode}
                       onChange={(e) => handleVariantChange(variantIdx, "colorCode", e.target.value)}
-                      className="w-full p-2 bg-black border border-gray-700 rounded text-sm h-10"
+                      className="w-full p-1 bg-black border border-gray-700 rounded text-xs h-9"
                     />
                   </div>
                 </div>
 
                 {/* Main Image */}
                 <div>
-                  <label className="block text-xs font-bold mb-2">Main Image (File) {!editingProduct || !variant.images.main ? "*" : ""}</label>
+                  <label className="block text-xs font-bold mb-1">Main Image {!editingProduct || !variant.images.main ? "*" : ""}</label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => handleMainImageChange(variantIdx, e.target.files?.[0])}
-                    className="w-full p-2 bg-black border border-gray-700 rounded text-white text-sm"
+                    className="w-full p-2 bg-black border border-gray-700 rounded text-white text-xs h-9"
                     required={!editingProduct || !variant.images.main}
                   />
                   {variant.images.main && (
                     <div className="mt-2">
                       <img
                         src={getFilePreview(variant.images.main)}
-                        alt="Main preview"
-                        className="h-20 rounded"
+                        alt="Preview"
+                        className="h-12 rounded"
                       />
-                      <p className="text-xs text-gray-400 mt-1">
-                        {variant.images.main instanceof File ? variant.images.main.name : "Existing image"}
+                      <p className="text-xs text-gray-400 mt-1 truncate">
+                        {variant.images.main instanceof File ? variant.images.main.name : "Existing"}
                       </p>
                     </div>
                   )}
@@ -325,30 +325,30 @@ const ProductForm = ({ onSuccess, editingProduct }) => {
 
                 {/* Sub Images */}
                 <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <label className="text-xs font-bold">Sub Images</label>
+                  <div className="flex justify-between items-center gap-2 mb-2">
+                    <label className="text-xs font-bold">Sub</label>
                     <button
                       type="button"
                       onClick={() => addSubImage(variantIdx)}
-                      className="text-xs px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded"
+                      className="text-xs px-1.5 py-0.5 bg-blue-600 hover:bg-blue-700 rounded h-7"
                     >
-                      + Add
+                      +
                     </button>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     {variant.images.sub.map((subImg, imgIdx) => (
-                      <div key={imgIdx} className="flex gap-2">
+                      <div key={imgIdx} className="flex gap-1">
                         <input
                           type="file"
                           accept="image/*"
                           onChange={(e) => handleSubImageChange(variantIdx, imgIdx, e.target.files?.[0])}
-                          className="flex-1 p-2 bg-black border border-gray-700 rounded text-white text-sm"
+                          className="flex-1 p-2 bg-black border border-gray-700 rounded text-white text-xs h-9"
                         />
                         {variant.images.sub.length > 1 && (
                           <button
                             type="button"
                             onClick={() => removeSubImage(variantIdx, imgIdx)}
-                            className="px-2 py-1 bg-red-600 hover:bg-red-700 rounded text-sm"
+                            className="px-2 bg-red-600 hover:bg-red-700 rounded text-xs h-9"
                           >
                             ✕
                           </button>
@@ -360,26 +360,26 @@ const ProductForm = ({ onSuccess, editingProduct }) => {
 
                 {/* SIZES */}
                 <div>
-                  <div className="flex justify-between items-center mb-2">
+                  <div className="flex justify-between items-center gap-2 mb-2">
                     <label className="text-xs font-bold">Sizes *</label>
                     <button
                       type="button"
                       onClick={() => addSize(variantIdx)}
-                      className="text-xs px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded"
+                      className="text-xs px-1.5 py-0.5 bg-blue-600 hover:bg-blue-700 rounded h-7"
                     >
-                      + Add Size
+                      +
                     </button>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     {variant.sizes.map((sizeData, sizeIdx) => (
-                      <div key={sizeIdx} className="flex gap-2 items-center">
+                      <div key={sizeIdx} className="grid grid-cols-3 sm:grid-cols-4 gap-1.5 items-center">
                         <input
                           type="number"
                           value={sizeData.size}
                           onChange={(e) => handleSizeChange(variantIdx, sizeIdx, "size", e.target.value)}
                           placeholder="Size"
-                          className="w-20 p-2 bg-black border border-gray-700 rounded text-white text-sm"
+                          className="p-2 bg-black border border-gray-700 rounded text-white text-xs h-9"
                           required
                         />
                         <input
@@ -387,7 +387,7 @@ const ProductForm = ({ onSuccess, editingProduct }) => {
                           value={sizeData.stock}
                           onChange={(e) => handleSizeChange(variantIdx, sizeIdx, "stock", e.target.value)}
                           placeholder="Stock"
-                          className="flex-1 p-2 bg-black border border-gray-700 rounded text-white text-sm"
+                          className="p-2 bg-black border border-gray-700 rounded text-white text-xs h-9"
                           required
                         />
                         <input
@@ -395,14 +395,14 @@ const ProductForm = ({ onSuccess, editingProduct }) => {
                           value={sizeData.price}
                           onChange={(e) => handleSizeChange(variantIdx, sizeIdx, "price", e.target.value)}
                           placeholder="Price"
-                          className="w-24 p-2 bg-black border border-gray-700 rounded text-white text-sm"
+                          className="p-2 bg-black border border-gray-700 rounded text-white text-xs h-9"
                           required
                         />
                         {variant.sizes.length > 1 && (
                           <button
                             type="button"
                             onClick={() => removeSize(variantIdx, sizeIdx)}
-                            className="px-2 py-1 bg-red-600 hover:bg-red-700 rounded text-sm"
+                            className="px-2 bg-red-600 hover:bg-red-700 rounded text-xs h-9"
                           >
                             ✕
                           </button>
@@ -421,9 +421,9 @@ const ProductForm = ({ onSuccess, editingProduct }) => {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-white text-black py-3 font-bold rounded-lg hover:bg-gray-200 disabled:opacity-50 transition"
+        className="w-full bg-white text-black py-2.5 sm:py-3 font-bold rounded-lg hover:bg-gray-200 disabled:opacity-50 transition text-xs sm:text-sm h-10 sm:h-12"
       >
-        {loading ? (editingProduct ? "Updating..." : "Adding...") : (editingProduct ? "Update Product" : "Add Product")}
+        {loading ? (editingProduct ? "..." : "...") : (editingProduct ? "Update" : "Add")}
       </button>
     </form>
   );
