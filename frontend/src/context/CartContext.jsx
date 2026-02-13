@@ -221,11 +221,19 @@ export const CartProvider = ({ children }) => {
     try {
       dispatch({ type: "SET_ERROR", payload: null });
       const data = await cartService.addToCart(itemData);
+      
+      // Handle both wrapped ({cart: {...}}) and unwrapped responses
       const cartData = data.cart || data;
-      dispatch({ type: "SET_CART_ITEMS", payload: cartData.items || [] });
-      return true;
+      const items = Array.isArray(cartData.items) ? cartData.items : [];
+      
+      if (items && items.length >= 0) {
+        dispatch({ type: "SET_CART_ITEMS", payload: items });
+        return true;
+      } else {
+        throw new Error("Invalid cart response format");
+      }
     } catch (err) {
-      const errorMsg = err.response?.data?.message || "Failed to add item to cart";
+      const errorMsg = err.response?.data?.message || err.message || "Failed to add item to cart";
       dispatch({ type: "SET_ERROR", payload: errorMsg });
       console.error("Error adding to cart:", err);
       return false;
@@ -296,13 +304,14 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const handleAddToCart = (item) => {
+  const handleAddToCart = async (item) => {
     if (user) {
-      // If user is logged in, sync with backend
-      addToCartBackend(item);
+      // If user is logged in, sync with backend and return result
+      return await addToCartBackend(item);
     } else {
       // If not logged in, add to local state
       dispatch({ type: "ADD_TO_CART", payload: item });
+      return true;
     }
   };
 

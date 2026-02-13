@@ -38,11 +38,17 @@ export const addToCart = async (req, res) => {
     const { productId, name, color, size, price, quantity, image, maxStock } = req.body;
 
     if (!productId || !name || !price || !quantity) {
-      return res.status(400).json({ message: "Missing required fields" });
+      return res.status(400).json({ 
+        success: false,
+        message: "Missing required fields" 
+      });
     }
 
     if (quantity > maxStock) {
-      return res.status(400).json({ message: `Cannot add more than ${maxStock} items in stock` });
+      return res.status(400).json({ 
+        success: false,
+        message: `Cannot add more than ${maxStock} items in stock` 
+      });
     }
 
     let cart = await Cart.findOne({ userId: req.user.id });
@@ -68,7 +74,10 @@ export const addToCart = async (req, res) => {
       // Update quantity if item exists
       const newQuantity = cartItem.quantity + quantity;
       if (newQuantity > maxStock) {
-        return res.status(400).json({ message: `Cannot add more than ${maxStock} items in stock` });
+        return res.status(400).json({ 
+          success: false,
+          message: `Cannot add more than ${maxStock} items in stock` 
+        });
       }
       cartItem.quantity = newQuantity;
       await cartItem.save();
@@ -104,13 +113,17 @@ export const addToCart = async (req, res) => {
 
     console.log("📊 Cart totals - Items:", updatedCart.totalItems, "Price:", updatedCart.totalPrice);
 
-    res.json({
-      message: "Item added to cart",
+    res.status(200).json({
+      success: true,
+      message: "Item added to cart successfully",
       cart: updatedCart
     });
   } catch (error) {
     console.error("❌ Add to cart error:", error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ 
+      success: false,
+      message: error.message || "Failed to add item to cart" 
+    });
   }
 };
 
